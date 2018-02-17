@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using QuickAudit.Domain;
 
 namespace QuickAudit.ConsoleApp
@@ -33,25 +31,6 @@ namespace QuickAudit.ConsoleApp
 
             Console.WriteLine("Press a key...");
             Console.ReadKey();
-        }
-    }
-
-    public static class ChangeTrackerExtensions
-    {
-        public static void DisplayTrackedEntities(this ChangeTracker changeTracker)
-        {
-            Console.WriteLine("");
-
-            var entries = changeTracker.Entries();
-            foreach (var entry in entries)
-            {
-                var type = entry.Entity.GetType();
-                Console.WriteLine("Entity Name: {0}", type.Name);
-               
-                Console.WriteLine("Status: {0}", entry.State);
-            }
-            Console.WriteLine("");
-            Console.WriteLine("---------------------------------------");
         }
     }
 }

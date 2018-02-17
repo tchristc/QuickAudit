@@ -1,23 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace QuickAudit.Domain
 {
-    public class Person
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
     public class QuickAuditDbContext : DbContext
     {
+        public DbSet<AuditEntry> AuditEntries { get; set; }
+        public DbSet<AuditEntryProperty> AuditEntryProperties { get; set; }
         public DbSet<Person> Persons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Person>().ToTable("Person");
+
+            modelBuilder.Entity<AuditEntry>().ToTable("AuditEntry");
+            modelBuilder.Entity<AuditEntryProperty>().ToTable("AuditEntryProperty");
+
+            modelBuilder.Entity<AuditEntry>()
+                .Property(e => e.EntityTypeName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<AuditEntry>()
+                .Property(e => e.StateName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<AuditEntry>()
+                .Property(e => e.CreatedBy)
+                .IsUnicode(false);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,50 +48,44 @@ namespace QuickAudit.Domain
                 where e.State != EntityState.Unchanged
                 select e;
 
+            var auditEntries = new List<AuditEntry>();
+
             foreach (var change in changes)
             {
                 var type = change.Entity.GetType();
-                if (change.State == EntityState.Added)
-                {
-                    // Log Added
-                }
-                else if (change.State == EntityState.Modified)
-                {
-                    // Log Modified
-                    //var item = change.Cast<IEntity>().Entity;
-                    var originalValues = Entry(change.Entity).OriginalValues;
-                    var currentValues = Entry(change.Entity).CurrentValues;
 
-                    foreach (var property in originalValues.Properties)
+                var auditEntry = new AuditEntry
+                {
+                    CreatedBy = "SYSTEM",
+                    CreatedDate = DateTime.Now,
+                    StateName = change.State.ToString(),
+                    State = (int) change.State,
+                    EntityTypeName = type.Name
+                };
+
+                var originalValues = Entry(change.Entity).OriginalValues;
+                var currentValues = Entry(change.Entity).CurrentValues;
+
+                foreach (var property in originalValues.Properties)
+                {
+                    var original = originalValues[property.Name];
+                    var current = currentValues[property.Name];
+
+
+                    auditEntry.AuditEntryProperties.Add(new AuditEntryProperty
                     {
-                        
-                        var original = originalValues[property.Name];
-                        var current = currentValues[property.Name];
-
-                        if (!Equals(original, current))
-                        {
-                            Console.WriteLine($"{property.Name}: {original} => {current}");
-                            //var originalIdx = originalValues[property];
-                            //Console.WriteLine("{6} = {0}.{4} [{7}][{2}] [{1}] --> [{3}]  Rel:{5}",
-                            //    type,
-                            //    change.OriginalValues.GetValue(originalIdx),
-                            //    change.OriginalValues.GetFieldType(originalIdx),
-                            //    change.CurrentValues.GetValue(originalIdx),
-                            //    change.OriginalValues.EntityType.Name.GetName(originalIdx),
-                            //    change.IsRelationship,
-                            //    change.State,
-                                //string.Join(",", change..EntityKeyValues.Select(v => string.Join(" = ", v.Key, v.Value))));
-                        }
-                    }
-
+                        OldValue = original?.ToString() ?? "",
+                        NewValue = current?.ToString() ?? "",
+                        PropertyName = property.Name
+                    });
                 }
-                else if (change.State == EntityState.Deleted)
-                {
-                    // log deleted
-                }
+
+                auditEntries.Add(auditEntry);
             }
-            // don't forget to save
-            return 0;//base.SaveChanges();
+
+            auditEntries.ForEach(a => AuditEntries.Add(a));
+
+            return base.SaveChanges();
         }
     }
 }

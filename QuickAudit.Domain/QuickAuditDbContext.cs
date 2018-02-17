@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore.Design;
-//using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
 namespace QuickAudit.Domain
@@ -15,11 +13,6 @@ namespace QuickAudit.Domain
     public class QuickAuditDbContext : DbContext
     {
         public DbSet<Person> Persons { get; set; }
-
-        //public QuickAuditDbContext(DbContextOptions<QuickAuditDbContext> options) 
-        //    : base(options)
-        //{
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,17 +28,4 @@ namespace QuickAudit.Domain
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("QuickAuditDatabase"));
         }
     }
-
-    //public class QuickAuditDbContextFactory : IDesignTimeDbContextFactory<QuickAuditDbContext>
-    //{
-    //    //public QuickAuditDbContext Create(DbContextFactoryOptions options)
-    //    //{
-    //    //    return new QuickAuditDbContext();
-    //    //}
-
-    //    public QuickAuditDbContext CreateDbContext(string[] args)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }

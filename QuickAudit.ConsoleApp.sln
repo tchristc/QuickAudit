@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickAudit.ConsoleApp", "QuickAudit.ConsoleApp\QuickAudit.ConsoleApp.csproj", "{A93023BD-EECB-4FEE-AB3B-827035077C98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickAudit.Domain", "QuickAudit.Domain\QuickAudit.Domain.csproj", "{07C0C165-BC78-42E6-9DC3-6F04C9CD4768}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A93023BD-EECB-4FEE-AB3B-827035077C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93023BD-EECB-4FEE-AB3B-827035077C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93023BD-EECB-4FEE-AB3B-827035077C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93023BD-EECB-4FEE-AB3B-827035077C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07C0C165-BC78-42E6-9DC3-6F04C9CD4768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07C0C165-BC78-42E6-9DC3-6F04C9CD4768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07C0C165-BC78-42E6-9DC3-6F04C9CD4768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07C0C165-BC78-42E6-9DC3-6F04C9CD4768}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E7BB7E7-42AC-40A3-BE24-D86FFC9B9694}
+	EndGlobalSection
+EndGlobal
